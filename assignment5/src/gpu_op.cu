@@ -226,7 +226,7 @@ int DLGpuMatrixMultiply(const DLArrayHandle matA, bool transposeA,
   }
   int m = transposeA ? matA->shape[1] : matA->shape[0];
   int k = transposeA ? matA->shape[0] : matA->shape[1];
-  int n = transposeB ? matB->shape[1] : matB->shape[0];
+  int n = transposeB ? matB->shape[0] : matB->shape[1];
   
   float alpha = 1.0f;
   float beta = 0.0f;
@@ -238,10 +238,10 @@ int DLGpuMatrixMultiply(const DLArrayHandle matA, bool transposeA,
               transa, transb,
               n, m, k,
               &alpha,
-              (const float *)matB->data, transposeB ? k : n,
-              (const float *)matA->data, transposeA ? m : k,
+              (const float *)matB->data, matB->shape[1],
+              (const float *)matA->data, matA->shape[1],
               &beta,
-              (float *)matC->data, n);
+              (float *)matC->data, matC->shape[1]);
   return 0;
 }
 
