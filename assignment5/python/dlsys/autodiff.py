@@ -475,7 +475,7 @@ class SoftmaxCrossEntropyOp(Op):
 
     def infer_shape(self, node, input_shapes):
         """TODO: Your code here"""
-        return (input_shapes[0][0], 1)
+        return (1,)
 
 
 class SoftmaxOp(Op):
