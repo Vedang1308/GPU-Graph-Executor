@@ -1,4 +1,9 @@
-CUDA_DIR = /usr/local/cuda
+NVCC_PATH := $(shell which nvcc 2>/dev/null)
+ifneq ($(NVCC_PATH),)
+CUDA_DIR ?= $(patsubst %/bin/nvcc,%,$(NVCC_PATH))
+else
+CUDA_DIR ?= /usr/local/cuda
+endif
 
 CC_SRCS := $(wildcard src/*.cc)
 CC_OBJS := ${CC_SRCS:src/%.cc=build/obj/%.o}
@@ -13,10 +18,11 @@ LD_FLAGS = -L$(CUDA_DIR)/lib64 -lcuda -lcudart -lcublas
 
 NVCC = nvcc
 NVCC_FLAGS = -std=c++11 --compiler-options '-fPIC'
-ARCH = -gencode arch=compute_30,code=sm_30 \
-       -gencode arch=compute_35,code=sm_35 \
-       -gencode arch=compute_50,code=[sm_50,compute_50] \
-       -gencode arch=compute_52,code=[sm_52,compute_52]
+ARCH = -gencode arch=compute_50,code=[sm_50,compute_50] \
+       -gencode arch=compute_52,code=[sm_52,compute_52] \
+       -gencode arch=compute_60,code=[sm_60,compute_60] \
+       -gencode arch=compute_70,code=[sm_70,compute_70] \
+       -gencode arch=compute_80,code=[sm_80,compute_80]
 
 all: build/lib/libc_runtime_api.so
 
